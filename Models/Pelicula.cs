@@ -22,7 +22,8 @@ namespace Projecto.Models
     public int DirectorId { get; set; }
     public Director Director { get; set; }
 
-    public ICollection<Actor> Actores { get; set; } = new List<Actor>();
+    public ICollection<PeliculaActor> Actores { get; set; } = new List<PeliculaActor>();
+    public ICollection<Comentarios> Comments { get; set; } = new List<Comentarios>();
   }
 
 }
