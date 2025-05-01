@@ -8,7 +8,7 @@
         public int PeliculaId { get; set; }
         public Pelicula Pelicula { get; set; }
         public int Rating { get; set; } // Rating del 1 al 5
-        public string Usuario { get; set; } // Nombre del usuario que comenta
+        public string Usuario { get; set; } // Nombre del usuario que comenta   
 
     }
 }
