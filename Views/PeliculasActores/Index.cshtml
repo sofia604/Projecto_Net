@@ -1,0 +1,47 @@
+@model IEnumerable<Projecto.Models.PeliculaActor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Pelicula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Actor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rol)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
+            </td>
+            <td>
+				@item.Actor.Nombre @item.Actor.Apellido
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rol)
+            </td>
+            <td>
+					@Html.ActionLink("Edit", "Edit", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
+					@Html.ActionLink("Details", "Details", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
+					@Html.ActionLink("Delete", "Delete", new { peliculaId = item.PeliculaId, actorId = item.ActorId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
