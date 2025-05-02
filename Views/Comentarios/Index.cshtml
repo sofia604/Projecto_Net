@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Projecto.Models.Comentarios>
+@model IEnumerable<Projecto.Models.Comentarios>
 
 @{
     ViewData["Title"] = "Index";
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.FechaComentario)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Pelicula.Id)
+                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)

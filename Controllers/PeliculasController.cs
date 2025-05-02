@@ -49,8 +49,13 @@ namespace Projecto.Controllers
         // GET: Peliculas/Create
         public IActionResult Create()
         {
-            ViewData["DirectorId"] = new SelectList(_context.Directores, "Id", "Id");
-            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Id");
+            ViewData["DirectorId"] = new SelectList(_context.Directores.Select(pelicula => new
+                                                      {
+                                                        pelicula.Id,
+                                                        NombreCompleto = pelicula.Nombre + " " + pelicula.Apellido
+                                                      }),
+                                                      "Id", "NombreCompleto");
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nombre");
             return View();
         }
 
@@ -73,7 +78,7 @@ namespace Projecto.Controllers
                                                         NombreCompleto = pelicula.Nombre + " " + pelicula.Apellido
                                                       }),
                                                       "Id", "NombreCompleto", pelicula.DirectorId);
-            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Id", pelicula.GeneroId);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nombre", pelicula.GeneroId);
             return View(pelicula);
         }
 

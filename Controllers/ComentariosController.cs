@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +48,7 @@ namespace Projecto.Controllers
         // GET: Comentarios/Create
         public IActionResult Create()
         {
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id");
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace Projecto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id", comentarios.PeliculaId);
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo", comentarios.PeliculaId);
             return View(comentarios);
         }
 
@@ -82,7 +82,7 @@ namespace Projecto.Controllers
             {
                 return NotFound();
             }
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id", comentarios.PeliculaId);
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo", comentarios.PeliculaId);
             return View(comentarios);
         }
 
@@ -118,7 +118,7 @@ namespace Projecto.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id", comentarios.PeliculaId);
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo", comentarios.PeliculaId);
             return View(comentarios);
         }
 
