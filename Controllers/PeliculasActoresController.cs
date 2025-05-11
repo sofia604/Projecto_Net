@@ -20,11 +20,43 @@ namespace Projecto.Controllers
     }
 
     // GET: PeliculasActores
-    public async Task<IActionResult> Index()
+ 
+    public async Task<IActionResult> Index(string searchString, int page = 1)
     {
-      var appDbContext = _context.PeliculasActores.Include(p => p.Actor).Include(p => p.Pelicula);
-      return View(await appDbContext.ToListAsync());
+      
+      int pageSize = 5;
+
+
+      var peliculasActores = _context.PeliculasActores.Include(p => p.Actor)
+                              .Include(p => p.Pelicula)
+                              .AsQueryable(); 
+
+
+      if (!String.IsNullOrEmpty(searchString))
+      {
+        peliculasActores = peliculasActores.Where(p =>
+                               p.Pelicula.Titulo.Contains(searchString) ||
+                               p.Actor.Nombre.Contains(searchString)||
+                               p.Actor.Apellido.Contains(searchString)
+                               );
+      }
+
+      peliculasActores = peliculasActores.OrderBy(l => l.Pelicula.Titulo);
+
+      int totalPeliculas = await peliculasActores.CountAsync();
+
+      var peliculasActores2 = await peliculasActores
+          .Skip((page - 1) * pageSize)
+          .Take(pageSize)
+          .ToListAsync();
+
+      ViewData["CurrentPage"] = page;
+      ViewData["TotalPages"] = (int)Math.Ceiling(totalPeliculas / (double)pageSize);
+      ViewData["CurrentFilter"] = searchString;
+
+      return View(peliculasActores2);
     }
+
 
     // GET: PeliculasActores/Details/5
     [HttpGet("PeliculasActores/Details/{peliculaId}/{actorId}")]
@@ -51,7 +83,7 @@ namespace Projecto.Controllers
     // GET: PeliculasActores/Create
     public IActionResult Create()
     {
-      ViewData["ActorId"] = new SelectList(_context.Actores
+      ViewData["ActorId"] = new SelectList(_context.Actores.OrderBy(l => l.Nombre)
                                   .Select(actor => new
                                   {
                                     actor.Id,
@@ -61,7 +93,7 @@ namespace Projecto.Controllers
                                 );
 
 
-      ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo");
+      ViewData["PeliculaId"] = new SelectList(_context.Peliculas.OrderBy(l => l.Titulo), "Id", "Titulo");
       return View();
     }
 
@@ -78,8 +110,17 @@ namespace Projecto.Controllers
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
       }
-      ViewData["ActorId"] = new SelectList(_context.Actores, "Id", "Id", peliculaActor.ActorId);
-      ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id", peliculaActor.PeliculaId);
+      ViewData["ActorId"] = new SelectList(_context.Actores.OrderBy(l => l.Nombre)
+                            .Select(actor => new
+                            {
+                              actor.Id,
+                              NombreCompleto = actor.Nombre + " " + actor.Apellido
+                            }),
+                          "Id", "NombreCompleto"
+                          );
+
+
+      ViewData["PeliculaId"] = new SelectList(_context.Peliculas.OrderBy(l => l.Titulo), "Id", "Titulo");
       return View(peliculaActor);
     }
 
@@ -118,13 +159,9 @@ namespace Projecto.Controllers
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int peliculaId, int actorId, [Bind("PeliculaId,ActorId,Rol")] PeliculaActor peliculaActor)
+    public async Task<IActionResult> EditRol([Bind("PeliculaId,ActorId,Rol")] PeliculaActor peliculaActor)
     {
-      if (peliculaId != peliculaActor.PeliculaId || actorId != peliculaActor.ActorId)
-      {
-        return NotFound();
-      }
-
+      
       if (ModelState.IsValid)
       {
         try
@@ -145,8 +182,16 @@ namespace Projecto.Controllers
         }
         return RedirectToAction(nameof(Index));
       }
-      ViewData["ActorId"] = new SelectList(_context.Actores, "Id", "Id", peliculaActor.ActorId);
-      ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Id", peliculaActor.PeliculaId);
+      ViewData["ActorId"] = new SelectList(
+                               _context.Actores.Select(a => new
+                               {
+                                 a.Id,
+                                 NombreCompleto = a.Nombre + " " + a.Apellido
+                               }),
+                               "Id", "NombreCompleto",
+                               peliculaActor.ActorId
+                               );
+      ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo", peliculaActor.PeliculaId);
       return View(peliculaActor);
     }
 
@@ -174,14 +219,18 @@ namespace Projecto.Controllers
     // POST: PeliculasActores/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? peliculaId, int? actorId)
+    public async Task<IActionResult> DeleteConfirmed(int? PeliculaId, int? ActorId)
     {
-      if (peliculaId == null || actorId == null)
+      if (PeliculaId == null || ActorId == null)
       {
         return NotFound();
       }
 
-      var peliculaActor = await _context.PeliculasActores.FindAsync(peliculaId, actorId);
+      var peliculaActor = await _context.PeliculasActores
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(pa => pa.PeliculaId == PeliculaId && pa.ActorId == ActorId);
+    
+
       if (peliculaActor != null)
       {
         _context.PeliculasActores.Remove(peliculaActor);

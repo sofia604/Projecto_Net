@@ -1,22 +1,32 @@
 @model IEnumerable<Projecto.Models.PeliculaActor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Actores y Películas";
 }
 
-<h1>Index</h1>
+<h1>Listado de Actores y Películas</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-flex justify-content-end">
+	<p>
+		<a asp-action="Create" class="btn btn-primary mb-4">Nuevo Registro</a>
+	</p>
+</div>
+<div class="row">
+	<form asp-action="Index" method="get" class="form-inline mb-3">
+		<div class="form-group d-flex align-items-center gap-2">
+			<input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por nombre de actor o Película" />
+			<button type="submit" class="btn btn-dark">Buscar</button>
+		</div>
+	</form>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Pelicula)
+                @Html.DisplayNameFor(model => model.PeliculaId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Actor)
+                @Html.DisplayNameFor(model => model.ActorId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rol)
@@ -37,11 +47,33 @@
                 @Html.DisplayFor(modelItem => item.Rol)
             </td>
             <td>
-					@Html.ActionLink("Edit", "Edit", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
-					@Html.ActionLink("Details", "Details", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
-					@Html.ActionLink("Delete", "Delete", new { peliculaId = item.PeliculaId, actorId = item.ActorId })
+					@Html.ActionLink("Editar Rol", "Edit", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
+					@Html.ActionLink("Detalles", "Details", new { peliculaId = item.PeliculaId, actorId = item.ActorId }) |
+					@Html.ActionLink("Eliminar", "Delete", new { peliculaId = item.PeliculaId, actorId = item.ActorId })
             </td>
         </tr>
 }
     </tbody>
 </table>
+<nav aria-label="Paginación de Películas" class="d-flex justify-content-center">
+	<ul class="pagination">
+		@{
+			int currentPage = (int)ViewData["CurrentPage"];
+			int totalPages = (int)ViewData["TotalPages"];
+			string currentFilter = ViewData["CurrentFilter"] as string ?? "";
+		}
+
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			<li class="page-item @(i== currentPage ? "active": "")">
+				<a class="page-link"
+				   asp-action="Index"
+				   asp-route-page="@i"
+				   asp-route-searchString="@currentFilter">
+					@i
+				</a>
+			</li>
+		}
+
+	</ul>
+</nav>

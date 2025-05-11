@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,10 +20,37 @@ namespace Projecto.Controllers
         }
 
         // GET: Generos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int page = 1)
         {
-            return View(await _context.Generos.ToListAsync());
-        }
+   
+          int pageSize = 5;
+
+
+          var generosPeliculas = _context.Generos
+                       .OrderBy(l => l.Nombre)
+                       .AsQueryable(); 
+
+
+          if (!String.IsNullOrEmpty(searchString))
+          {
+              generosPeliculas = generosPeliculas.Where(b => b.Nombre.Contains(searchString));
+          }
+
+          generosPeliculas = generosPeliculas.OrderBy(l => l.Nombre); 
+
+          int totalLibros = await generosPeliculas.CountAsync();
+
+          var generosPeliculas2 = await generosPeliculas
+              .Skip((page - 1) * pageSize) 
+              .Take(pageSize) 
+              .ToListAsync();
+
+          ViewData["CurrentPage"] = page;
+          ViewData["TotalPages"] = (int)Math.Ceiling(totalLibros / (double)pageSize);
+          ViewData["CurrentFilter"] = searchString;
+
+          return View(generosPeliculas2);
+    }
 
         // GET: Generos/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -1,59 +1,59 @@
-﻿@model Projecto.Models.Pelicula
+@model Projecto.Models.Pelicula
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Película";
 }
 
-<h1>Create</h1>
+<h1>Registrar Nueva Película</h1>
 
-<h4>Pelicula</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sinopsis" class="control-label"></label>
-                <input asp-for="Sinopsis" class="form-control" />
-                <span asp-validation-for="Sinopsis" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Duracion" class="control-label"></label>
-                <input asp-for="Duracion" class="form-control" />
-                <span asp-validation-for="Duracion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaEstreno" class="control-label"></label>
-                <input asp-for="FechaEstreno" class="form-control" />
-                <span asp-validation-for="FechaEstreno" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImagenRuta" class="control-label"></label>
-                <input asp-for="ImagenRuta" class="form-control" />
-                <span asp-validation-for="ImagenRuta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GeneroId" class="control-label"></label>
-                <select asp-for="GeneroId" class ="form-control" asp-items="ViewBag.GeneroId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DirectorId" class="control-label"></label>
-                <select asp-for="DirectorId" class ="form-control" asp-items="ViewBag.DirectorId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+	<form asp-action="Create" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="form-group">
+					<label asp-for="Titulo" class="control-label fw-bold"></label>
+					<input asp-for="Titulo" class="form-control" />
+					<span asp-validation-for="Titulo" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Sinopsis" class="control-label fw-bold"></label>
+					<input asp-for="Sinopsis" class="form-control" />
+					<span asp-validation-for="Sinopsis" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Duracion" class="control-label fw-bold"></label>
+					<input asp-for="Duracion" class="form-control" />
+					<span asp-validation-for="Duracion" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="FechaEstreno" class="control-label fw-bold"></label>
+					<input asp-for="FechaEstreno" class="form-control" />
+					<span asp-validation-for="FechaEstreno" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="GeneroId" class="control-label fw-bold"></label>
+					<select asp-for="GeneroId" class="form-control" asp-items="ViewBag.GeneroId"></select>
+				</div>
+				<div class="form-group">
+					<label asp-for="DirectorId" class="control-label fw-bold"></label>
+					<select asp-for="DirectorId" class="form-control" asp-items="ViewBag.DirectorId"></select>
+				</div>
+			</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+			<div class="col-md-5">
+				<div class="form-group">
+					<label class="control-label fw-bold">Imagen de la Portada</label>
+					<input type="file" asp-for="ImagenPortada" name="ImagenPortada" class="form-control" />
+				</div>
+			</div>
+		</div>
+		<div class="form-group mt-3">
+			<input type="submit" value="Guardar" class="btn btn-primary" />
+			<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+		</div>
+	</form>
 </div>
 
 @section Scripts {

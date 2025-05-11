@@ -1,48 +1,52 @@
 @model Projecto.Models.PeliculaActor
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Rol";
 }
 
-<h1>Edit</h1>
+<h1>Editar Rol</h1>
 
-<h4>PeliculaActor</h4>
+<h4>Película - Actor</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-		<form asp-action="Edit" asp-route-peliculaId="@Model.PeliculaId" asp-route-actorId="@Model.ActorId">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-group">
-				<label asp-for="PeliculaId" class="control-label">Película</label>
-				<select asp-for="PeliculaId" class="form-control"
-						asp-items="@(ViewData["PeliculaId"] as SelectList)">
-				</select>
+<div class="card shadow-sm">
+	<div class="card-body">
+		<form asp-action="EditRol" asp-controller="PeliculasActores" method="post">
+			@Html.AntiForgeryToken()
+
+			<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+			<div class="mb-3">
+				<label asp-for="PeliculaId" class="form-label fw-bold"></label>
+				<select asp-for="PeliculaId" class="form-control" disabled
+						asp-items="@(ViewData["PeliculaId"] as SelectList)"></select>
 				<span asp-validation-for="PeliculaId" class="text-danger"></span>
+				<input type="hidden" asp-for="PeliculaId" />
 			</div>
 
-			<div class="form-group">
-				<label asp-for="ActorId" class="control-label">Actor</label>
-				<select asp-for="ActorId" class="form-control"
-						asp-items="@(ViewData["ActorId"] as SelectList)">
-				</select>
+			<div class="mb-3">
+				<label asp-for="ActorId" class="form-label fw-bold"></label>
+				<select asp-for="ActorId" class="form-control" disabled
+						asp-items="@(ViewData["ActorId"] as SelectList)"></select>
 				<span asp-validation-for="ActorId" class="text-danger"></span>
+				<input type="hidden" asp-for="ActorId" />
 			</div>
-            <div class="form-group">
-                <label asp-for="Rol" class="control-label"></label>
-                <input asp-for="Rol" class="form-control" />
-                <span asp-validation-for="Rol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+			<div class="mb-3">
+				<label asp-for="Rol" class="form-label fw-bold"></label>
+				<input asp-for="Rol" class="form-control" />
+				<span asp-validation-for="Rol" class="text-danger"></span>
+			</div>
+
+			<div class="d-flex justify-content-start gap-2">
+				<input type="submit" value="Guardar" class="btn btn-primary" />
+				<a asp-action="Index" class="btn btn-secondary">Regresar</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
