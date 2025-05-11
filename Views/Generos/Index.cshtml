@@ -1,14 +1,25 @@
-﻿@model IEnumerable<Projecto.Models.Genero>
+@model IEnumerable<Projecto.Models.Genero>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Géneros Películas";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Géneros de Películas</h1>
+<hr />
+<div class="d-flex justify-content-start">
+	
+	<p>
+		<a asp-action="Create" class="btn btn-primary mb-4">Nuevo Género</a>
+	</p>
+</div>
+<div class="row">
+	<form asp-action="Index" method="get" class="form-inline mb-3">
+		<div class="form-group d-flex align-items-center gap-2">
+			<input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por Género" />
+			<button type="submit" class="btn btn-dark">Buscar</button>
+		</div>
+	</form>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -31,11 +42,33 @@
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<nav aria-label="Paginación de Películas" class="d-flex justify-content-center">
+	<ul class="pagination">
+		@{
+			int currentPage = (int)ViewData["CurrentPage"];
+			int totalPages = (int)ViewData["TotalPages"];
+			string currentFilter = ViewData["CurrentFilter"] as string ?? "";
+		}
+
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			<li class="page-item @(i== currentPage ? "active": "")">
+				<a class="page-link"
+				   asp-action="Index"
+				   asp-route-page="@i"
+				   asp-route-searchString="@currentFilter">
+					@i
+				</a>
+			</li>
+		}
+
+	</ul>
+</nav>
