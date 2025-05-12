@@ -7,6 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Shared\Class.cs" />
+    <Compile Remove="Views\Shared\_ListaPeliculasPartial.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Shared\Component.razor" />
+    <Content Remove="Views\Shared\Component1.razor" />
+    <Content Remove="Views\Shared\_ListaComentariosPartial - Copia %282%29.cshtml" />
+    <Content Remove="Views\Shared\_ListaComentariosPartial - Copia.cshtml" />
+    <Content Remove="Views\Shared\_ListaPeliculasPartial.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Shared\htmlpage.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">

@@ -148,7 +148,21 @@ namespace Projecto.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> ObtenerPeliculas(int directorId)
+        {
+            var director = await _context.Directores
+            .Include(d => d.Peliculas)
+            .FirstOrDefaultAsync(m => m.Id == directorId);
 
+                if (director == null)
+                {
+                    return NotFound();
+                }
+            var peliculas = director.Peliculas.ToList();
+
+            return PartialView("_PeliculasDelDirectorPartial", peliculas);
+
+        }
         private bool DirectorExists(int id)
         {
             return _context.Directores.Any(e => e.Id == id);

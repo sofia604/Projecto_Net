@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
     <h4>Actor</h4>
@@ -14,13 +14,7 @@
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
+            @Html.DisplayFor(model => model.Nombre)  @Html.DisplayFor(model => model.Apellido)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nacionalidad)
@@ -32,11 +26,51 @@
             @Html.DisplayNameFor(model => model.FechaNacimiento)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaNacimiento)
+            @Convert.ToDateTime(Model.FechaNacimiento).ToString("d 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"))
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="d-flex justify-content-start gap-2 mt-5">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+
+    <a class="btn btn-warning" data-bs-toggle="modal"
+       data-bs-target="#peliculasModal"
+       onclick="cargarPeliculas(@Model.Id)">Ver películas</a>
+
+    <a asp-action="Index" class="btn btn-secondary">Regresar</a>
 </div>
+
+
+<div class="modal fade" id="peliculasModal" tabindex="-1" aria-labelledby="peliculasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="peliculasModalLabel">Películas del actor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body" id="contenedorPeliculas">
+                <div class="text-center text-muted">Cargando...</div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function cargarPeliculas(actorId) {
+            $("#contenedorPeliculas").html(
+                `<div class="text-center text-muted">Cargando películas...</div>`
+            );
+            $.get("/Actors/ObtenerPeliculas", { actorId: actorId }, function (data) {
+                $("#contenedorPeliculas").html(data);
+            });
+        }
+    </script>
+}

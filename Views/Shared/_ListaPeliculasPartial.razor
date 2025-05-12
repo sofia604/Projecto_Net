@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Projecto.Models.Peliculas>
+
+<div class="table-responsive">
+	<table class="table table-bordered table-responsive table-hover">
+		<thead>
+			<tr>
+				<th>Autor</th>
+				<th>Comentario</th>
+				<th>Rating</th>
+				<th>Fecha</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var comentario in Model)
+			{
+				<tr>
+					<td>@comentario.Usuario</td>
+					<td>@comentario.Comentario</td>
+					<td>@comentario.Rating/10</td>
+					<td>@comentario.FechaComentario.ToShortDateString()</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

@@ -153,5 +153,14 @@ namespace Projecto.Controllers
         {
             return _context.Actores.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> ObtenerPeliculas(int actorId)
+        {
+            var peliculas = await _context.Peliculas
+            .Where(p => p.Actores.Any(pa => pa.ActorId == actorId))
+            .ToListAsync();
+
+            return PartialView("_ListaPeliculasPartial", peliculas);
+        }
     }
 }

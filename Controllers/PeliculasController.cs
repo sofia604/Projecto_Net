@@ -99,30 +99,56 @@ namespace Projecto.Controllers
         {
             if (ModelState.IsValid)
             {
-                  if(pelicula.ImagenPortada != null && pelicula.ImagenPortada.Length > 0)
-                  {
-                      var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(pelicula.ImagenPortada.FileName);
-                      var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes", nombreArchivo);
+                if (pelicula.ImagenPortada != null && pelicula.ImagenPortada.Length > 0)
+                {
+                    try
+                    {
+                        // Crear carpeta "wwwroot/imagenes" si no existe
+                        var carpetaImagenes = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes");
+                        if (!Directory.Exists(carpetaImagenes))
+                        {
+                            Directory.CreateDirectory(carpetaImagenes);
+                        }
 
-                      using (var stream= new FileStream(ruta, FileMode.Create))
-                      {
-                          await pelicula.ImagenPortada.CopyToAsync(stream);
-                      }
+                        // Generar nombre único para el archivo
+                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(pelicula.ImagenPortada.FileName);
+                        var ruta = Path.Combine(carpetaImagenes, nombreArchivo);
 
-                      pelicula.ImagenRuta = "/imagenes/" + nombreArchivo;
-                  }
-                
-                  _context.Add(pelicula);
-                  await _context.SaveChangesAsync();
-                  return RedirectToAction(nameof(Index));
+                        // Guardar el archivo en el servidor
+                        using (var stream = new FileStream(ruta, FileMode.Create))
+                        {
+                            await pelicula.ImagenPortada.CopyToAsync(stream);
+                        }
+
+                        // Guardar la ruta relativa para mostrar la imagen en la vista
+                        pelicula.ImagenRuta = "/imagenes/" + nombreArchivo;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Capturar errores al guardar la imagen
+                        ModelState.AddModelError("", "Error al subir la imagen: " + ex.Message);
+                        // También puedes loguear el error si tienes un sistema de logs
+                    }
+                }
+
+                // Si llegamos aquí sin errores, guardar en la base de datos
+                _context.Add(pelicula);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-             ViewBag.DirectorId = new SelectList(_context.Directores.OrderBy(d => d.Nombre).Select(director => new
-                                                      {
-                                                        director.Id,
-                                                        NombreCompleto = director.Nombre + " " + director.Apellido
-                                                      }),
-                                                      "Id", "NombreCompleto", pelicula.DirectorId);
+
+            // Si el modelo no es válido, recargar las listas desplegables
+            ViewBag.DirectorId = new SelectList(
+                _context.Directores.OrderBy(d => d.Nombre).Select(director => new
+                {
+                    director.Id,
+                    NombreCompleto = director.Nombre + " " + director.Apellido
+                }),
+                "Id", "NombreCompleto", pelicula.DirectorId
+            );
+
             ViewBag.GeneroId = new SelectList(_context.Generos, "Id", "Nombre", pelicula.GeneroId);
+
             return View(pelicula);
         }
 

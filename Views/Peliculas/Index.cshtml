@@ -7,7 +7,9 @@
 <h2>Películas</h2>
 <div class="d-flex justify-content-end">
   <p>
-	  <a asp-action="Create" class="btn btn-primary mb-4">Registrar Nueva Película</a>
+		<a asp-action="Create" class="btn btn-outline-success rounded-pill">
+			<i class="bi bi-plus-circle-fill me-1"></i> Registrar una nueva película
+		</a>
   </p>
 </div>
 <div class="row">
@@ -38,9 +40,16 @@
 				</div>
 
 				<div class="card-footer text-center">
-					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">Editar</a>
-					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1">Detalles</a>
-					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Eliminar</a>
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm rounded-pill me-2">
+						<i class="bi bi-pencil-square me-1"></i> Editar
+					</a>
+					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm rounded-pill me-2">
+						<i class="bi bi-info-circle me-1"></i> Detalles
+					</a>
+					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm rounded-pill">
+						<i class="bi bi-trash me-1"></i> Eliminar
+					</a>
+
 				</div>
 			</div>
 		</div>

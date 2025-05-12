@@ -4,10 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Comentarios</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-outline-success rounded-pill">
+        <i class="bi bi-plus-circle me-1"></i> Nuevo Comentario
+    </a>
 </p>
 <table class="table">
     <thead>
@@ -27,7 +29,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Usuario)
             </th>
-            <th></th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -48,10 +50,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Usuario)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="text-left">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="text-primary me-2" title="Editar">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="text-info me-2" title="Detalles">
+                    <i class="bi bi-info-circle"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" title="Eliminar">
+                    <i class="bi bi-trash"></i>
+                </a>
             </td>
         </tr>
 }

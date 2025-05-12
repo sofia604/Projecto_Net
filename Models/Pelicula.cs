@@ -18,10 +18,12 @@ namespace Projecto.Models
 
     [Display(Name = "Duración (minutos)")]
     [Required(ErrorMessage = "La duración de la película (en minutos) es requerida.")]
-    public int Duracion { get; set; } // en minutos
+    [Range(1, 600, ErrorMessage = "La duración debe estar entre 1 y 600 minutos.")]
+    public int Duracion { get; set; }
 
-    [Display(Name = "Fecha de Estreno")]
-    [Required(ErrorMessage = "La fecha de estreno de la películ es requerida.")]
+
+        [Display(Name = "Fecha de Estreno")]
+    [Required(ErrorMessage = "La fecha de estreno de la película es requerida.")]
     public DateTime FechaEstreno { get; set; }
 
     [Display(Name = "Portada")]

@@ -53,7 +53,9 @@
 				@Html.DisplayNameFor(model => model.DirectorId)
 			</dt>
 			<dd class="col-sm-8">
-				@($"{Model.Director.Nombre} {Model.Director.Apellido}")
+				<a asp-controller="Directores" asp-action="Details" asp-route-id="@Model.DirectorId">
+					@Model.Director.Nombre @Model.Director.Apellido
+				</a>
 			</dd>
 			<dt class="col-sm-4">
 				Actores
@@ -64,7 +66,11 @@
 					<ul class="list-unstyled mb-0">
 						@foreach (var pa in Model.Actores)
 						{
-							<li>@($"{pa.Actor.Nombre} {pa.Actor.Apellido}")</li>
+							<li class="ipc-inline-list__item">
+								<a asp-controller="Actors" asp-action="Details" asp-route-id="@pa.Actor.Id">
+									@($"{pa.Actor.Nombre} {pa.Actor.Apellido} ")
+								</a>
+							</li>
 						}
 					</ul>
 				}

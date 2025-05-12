@@ -65,7 +65,7 @@ namespace Projecto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "Id", "Titulo", comentarios.PeliculaId);
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas.OrderBy(l => l.Titulo), "Id", "Titulo");
             return View(comentarios);
         }
 
